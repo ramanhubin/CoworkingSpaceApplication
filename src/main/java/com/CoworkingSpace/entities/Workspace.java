@@ -1,23 +1,34 @@
 package com.CoworkingSpace;
 
 import java.io.Serializable;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*
 
-public class Workspace implements Serializable {
-    private final int id;
-    private final String type;
-    private final float price;
-    private final List<Reservation> reservations; //List to store reservations connected to a current workspace
+;
+@Entity
+@Table(name = "Workspace")
+public class Workspace {
 
-    public Workspace(int id, String type, float price) {
-        this.id = id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Column(nullable = false)
+    private String type;
+
+    @Column(nullable = false)
+    private float price;
+
+    @OneToMany(mappedBy = "workspace", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>(); //List to store reservations connected to a current workspace
+
+    public Workspace(String type, float price) {
         this.type = type;
         this.price = price;
-        this.reservations = new ArrayList<>();
     }
-
     public int getWorkspaceId() {
         return id;
     }
